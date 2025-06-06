@@ -19,7 +19,7 @@ error TaskNotFound();
 error EmtpyDescription();
 error DescriptionTooLong();
 
-contract TodoList {
+contract TaskManager {
   // declear state variables, these are variables that will be stored on the blockchain
 
   address public owner;
