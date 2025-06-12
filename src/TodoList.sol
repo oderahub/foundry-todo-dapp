@@ -16,7 +16,7 @@ error TaskAlreadyCompleted();
 error NotOwner();
 error NotTaskCreator();
 error TaskNotFound();
-error EmtpyDescription();
+error EmptyDescription();
 error DescriptionTooLong();
 
 contract TaskManager {
@@ -50,7 +50,7 @@ contract TaskManager {
   }
 
   modifier onlyTaskCreator(uint256 _taskId) {
-    if (todos[_taskId].id == 0) revert TaskNotFound();
+    if (todos[_taskId].creator == address(0)) revert TaskNotFound();
     if (msg.sender != todos[_taskId].creator) revert NotTaskCreator();
     _;
   }
@@ -58,8 +58,8 @@ contract TaskManager {
   //function to create task
 
   function createTask(string calldata _description) public {
-    if (bytes(_description).length > 0) revert EmtpyDescription();
-    if (bytes(_description).length <= 500) revert DescriptionTooLong();
+    if (bytes(_description).length == 0) revert EmptyDescription();
+    if (bytes(_description).length > 500) revert DescriptionTooLong();
 
     uint256 taskId = nextTask;
 
@@ -89,7 +89,7 @@ contract TaskManager {
     string calldata _newDescription,
     uint256 _taskId
   ) public onlyTaskCreator(_taskId) {
-    if (bytes(_newDescription).length == 0) revert EmtpyDescription();
+    if (bytes(_newDescription).length == 0) revert EmptyDescription();
     if (bytes(_newDescription).length >= 500) revert DescriptionTooLong();
 
     todos[_taskId].description = _newDescription;
